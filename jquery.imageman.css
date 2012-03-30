@@ -1,0 +1,28 @@
+.imageman-viewer { height: 330px; position: relative;}
+.imageman-viewer.loading .imageman-viewer-controls { display: none;}
+.imageman-viewer.loading .imageman-viewer-loader {position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: #fff; opacity: 0.7;}
+.imageman-viewer-image { height: 300px; line-height: 300px; text-align: center;}
+.imageman-viewer-image img { vertical-align: middle; max-height: 250px; max-width: 600px; padding: 8px; border: 2px solid #ccc;}
+
+.imageman-browser { overflow: hidden;}
+.imageman-thumbs {margin: 5px;}
+.imageman-thumb { float: left; margin: 5px; height: 100px; width: 100px; border: 2px solid #ccc; padding: 3px; text-align: center; line-height: 95px; cursor: pointer;}
+.imageman-thumb img {vertical-align: middle; max-height: 100px; max-width: 100px;}
+
+.imageman-clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+.imageman-clearfix {
+  display: inline-block;
+}
+html[xmlns] .imageman-clearfix {
+  display: block;
+}
+* html .imageman-clearfix {
+  height: 1%;
+}
