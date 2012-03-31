@@ -1,13 +1,39 @@
 .imageman-viewer { height: 330px; position: relative;}
 .imageman-viewer.loading .imageman-viewer-controls { display: none;}
 .imageman-viewer.loading .imageman-viewer-loader {position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: #fff; opacity: 0.7;}
-.imageman-viewer-image { height: 300px; line-height: 300px; text-align: center;}
+.imageman-viewer-title { text-align: center; font-weight: bold; font-size: 14px;}
+.imageman-viewer-image { height: 290px; line-height: 290px; text-align: center;}
 .imageman-viewer-image img { vertical-align: middle; max-height: 250px; max-width: 600px; padding: 8px; border: 2px solid #ccc;}
 
-.imageman-browser { overflow: hidden;}
-.imageman-thumbs {margin: 5px;}
+.imageman-viewer-controls { text-align: center;}
+.imageman-viewer-control { display: inline-block; margin: 3px; padding: 0 0 0 20px; background-image: url(controls.png); background-repeat: no-repeat; height: 16px; cursor: pointer; color: navy; font-weight: bold;}
+.imageman-viewer-control.select { background-position: 0 0;}
+.imageman-viewer-control.select:hover { background-position: 0 -16px;}
+.imageman-viewer-control.delete { background-position: 0 -32px;}
+.imageman-viewer-control.delete:hover { background-position: 0 -48px;}
+
+.imageman-viewer-upload { display: none;}
+.imageman-viewer.uploading .imageman-viewer-upload { display: block; width: 300px; margin: 20px auto;}
+.imageman-viewer.uploading .imageman-viewer-image
+, .imageman-viewer.uploading .imageman-viewer-controls { display: none;}
+
+.imageman-browser { height: 132px; width: 620px; margin: 0 auto; border-style: solid; border-color: #ccc; border-width: 0 1px; position: relative;}
+.imageman-browser-button { position: absolute; top: 0; background-image: url(browser-buttons.png); background-repeat: no-repeat; width: 20px; height: 132px; cursor: pointer;}
+.imageman-browser-button.left { background-position: 0 0; left: -25px;}
+.imageman-browser-button.left:hover { background-position: 0 -132px;}
+.imageman-browser-button.right { background-position: -20px 0; right: -25px;}
+.imageman-browser-button.right:hover { background-position: -20px -132px;}
+
+.imageman-thumbs-outer { overflow: hidden; height: 132px; width: 620px;}
+.imageman-thumbs { margin: 5px; position: relative;}
 .imageman-thumb { float: left; margin: 5px; height: 100px; width: 100px; border: 2px solid #ccc; padding: 3px; text-align: center; line-height: 95px; cursor: pointer;}
-.imageman-thumb img {vertical-align: middle; max-height: 100px; max-width: 100px;}
+.imageman-thumb.selected { border-color: #3a7;}
+.imageman-thumb img { vertical-align: middle; max-height: 100px; max-width: 100px;}
+.imageman-thumb.deleting { background-color: #eee;}
+.imageman-thumb.deleting img { display: none;}
+
+.imageman-thumb-upload { background: url(thumb-upload.png) 50% 50% no-repeat;}
+.imageman-thumb-upload img { width: 100px; height: 100px; color: transparent;}
 
 .imageman-clearfix:after {
   content: ".";
