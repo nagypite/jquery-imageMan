@@ -1,18 +1,27 @@
 (function($){
   $.imageMan = {
       defaults: {
-          extractor: function(data) {
-            if (data && data.success && data.images) {
-              return data.images;
-            }
-            return null;
-          }
+          source: null
+        , baseSrc: ''
+        , delete: null
+        , select: null
         , dialog: {
             height: 500
           , width: 700
           , modal: true
           , title: 'Image manager'
-        }
+          }
+        , upload: typeof(qq) !== 'undefined'
+        , uploader: {
+            action: ''
+          , allowedExtensions: ['jpg', 'jpeg', 'gif', 'png']
+          }
+        , extractor: function(data) {
+            if (data && data.success && data.images) {
+              return data.images;
+            }
+            return null;
+          }
         , templateBody: '<div class="imageman-body">'
                         + '<div class="imageman-viewer loading">'
                         +   '<div class="imageman-viewer-title"></div>'
@@ -34,15 +43,6 @@
                         + '</div>'
         , templateThumb: '<div class="imageman-thumb"><img></div>'
         , templateUploadThumb: '<div class="imageman-thumb imageman-thumb-upload"><img title="upload image"></div>'
-        , baseSrc: ''
-        , source: null
-        , delete: null
-        , select: null
-        , upload: typeof(qq) !== 'undefined'
-        , uploader: {
-            action: ''
-          , allowedExtensions: ['jpg', 'jpeg', 'gif', 'png']
-        }
       }
     , dialog: null
     , uploader: null
