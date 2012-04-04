@@ -3,6 +3,7 @@
       defaults: {
           source: null
         , baseSrc: ''
+        , limit: false
         , delete: null
         , select: null
         , dialog: {
@@ -72,8 +73,16 @@
       }
     , resizeThumbs: function(dialog) {
         if (!dialog) dialog = $.imageMan.dialog;
-        var thumbs = dialog.find('.imageman-thumbs');
-        thumbs.width(thumbs.children().first().outerWidth(true) * thumbs.children().length);
+        var thumbsBox = dialog.find('.imageman-thumbs'), thumbs = thumbsBox.children();
+        thumbsBox.width(thumbs.first().outerWidth(true) * thumbs.length);
+
+        if ($.imageMan.opts.limit) thumbs.each( function(i) {
+          if (i >= $.imageMan.opts.limit && !$(this).hasClass('imageman-thumb-upload')) {
+            $(this).addClass('overlimit');
+          } else {
+            $(this).removeClass('overlimit');
+          }
+        });
       }
     , centerThumb: function() {
         var thumb = this
@@ -101,6 +110,10 @@
           if (!$.imageMan.opts.delete) {
             body.find('.imageman-viewer-control.delete').remove();
           }
+          if ($.imageMan.opts.limitText) {
+            var limitBox = $('<div class="imageman-viewer-limittext"></div>').text($.imageMan.opts.limitText);
+            body.find('.imageman-viewer-controls').after(limitBox)
+          }
 
           $.each(images, function() {
             body.find('.imageman-thumbs').append($.imageMan.createThumb.apply(this));
@@ -123,6 +136,7 @@
 
               thumb.siblings('.selected').removeClass('selected');
               thumb.addClass('selected');
+              viewer.toggleClass('overlimit', thumb.hasClass('overlimit'));
               $.imageMan.centerThumb.apply(thumb);
 
               if (thumb.hasClass('imageman-thumb-upload')) {

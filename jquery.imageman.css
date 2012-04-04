@@ -2,8 +2,10 @@
 .imageman-viewer.loading .imageman-viewer-controls { display: none;}
 .imageman-viewer.loading .imageman-viewer-loader {position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: #fff; opacity: 0.7;}
 .imageman-viewer-title { text-align: center; font-weight: bold; font-size: 14px;}
-.imageman-viewer-image { height: 290px; line-height: 290px; text-align: center;}
+.imageman-viewer-image { height: 275px; line-height: 275px; text-align: center;}
 .imageman-viewer-image img { vertical-align: middle; max-height: 250px; max-width: 600px; padding: 8px; border: 2px solid #ccc;}
+.imageman-viewer-limittext { color: red; text-align: center; display: none;}
+.imageman-viewer.overlimit .imageman-viewer-limittext { display: block;}
 
 .imageman-viewer-controls { text-align: center;}
 .imageman-viewer-control { display: inline-block; margin: 3px; padding: 0 0 0 20px; background-image: url(controls.png); background-repeat: no-repeat; height: 16px; cursor: pointer; color: navy; font-weight: bold;}
@@ -31,6 +33,8 @@
 .imageman-thumb img { vertical-align: middle; max-height: 100px; max-width: 100px;}
 .imageman-thumb.deleting { background-color: #eee;}
 .imageman-thumb.deleting img { display: none;}
+.imageman-thumb.overlimit { border-color: #e32;}
+.imageman-thumb.overlimit.selected { border-color: #e92;}
 
 .imageman-thumb-upload { background: url(thumb-upload.png) 50% 50% no-repeat;}
 .imageman-thumb-upload img { width: 100px; height: 100px; color: transparent;}
