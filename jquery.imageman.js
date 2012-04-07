@@ -142,7 +142,7 @@
               if (thumb.hasClass('imageman-thumb-upload')) {
                 var upload = viewer.find('.imageman-viewer-upload');
 
-                viewer.addClass('uploading');
+                viewer.addClass('uploading').removeClass('loading');
                 if (!upload.hasClass('loaded')) {
                   var uploaderOpts = $.extend({}, $.imageMan.opts.uploader);
                   uploaderOpts.element = upload[0];
