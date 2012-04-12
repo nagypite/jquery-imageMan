@@ -47,22 +47,21 @@
       }
     , dialog: null
     , uploader: null
-    , deleteCallback: function(thumb) {
-        var activeThumb = thumb.prev().length ? thumb.prev() : thumb.next();
+    , deleteCallback: function(options) {
+        var thumb = this, activeThumb = thumb.prev().length ? thumb.prev() : thumb.next();
         // TODO handle last image
         activeThumb.click();
         thumb.addClass('deleting');
         thumb.animate({width:0, marginLeft:0, marginRight:0, paddingLeft:0, paddingRight:0}, 'slow', 'linear', function() {
           $(this).remove();
-          $.imageMan.resizeThumbs();
+          $.imageMan.resizeThumbs(options);
         });
-        
       }
-    , createThumb: function() {
+    , createThumb: function(options) {
         var image = this
-          , thumb = $($.imageMan.opts.templateThumb);
+          , thumb = $(options.templateThumb);
 
-        image.src = $.imageMan.opts.baseSrc + image.filename;
+        image.src = options.baseSrc + image.filename;
         thumb.find('img')
             .attr('src', image.src)
             .attr('title', image.title || image.filename);
@@ -71,13 +70,13 @@
 
         return thumb;
       }
-    , resizeThumbs: function(dialog) {
+    , resizeThumbs: function(options, dialog) {
         if (!dialog) dialog = $.imageMan.dialog;
         var thumbsBox = dialog.find('.imageman-thumbs'), thumbs = thumbsBox.children();
         thumbsBox.width(thumbs.first().outerWidth(true) * thumbs.length);
 
-        if ($.imageMan.opts.limit) thumbs.each( function(i) {
-          if (i >= $.imageMan.opts.limit && !$(this).hasClass('imageman-thumb-upload')) {
+        if (options.limit) thumbs.each( function(i) {
+          if (i >= options.limit && !$(this).hasClass('imageman-thumb-upload')) {
             $(this).addClass('overlimit');
           } else {
             $(this).removeClass('overlimit');
@@ -95,39 +94,39 @@
 
         thumbs.animate({left: Math.min(Math.max(leftMin, leftPos), 0)});
       }
-    , opts: {}
-    , open: function() {
+    , open: function(options) {
         var trigger = $(this);
-        $.getJSON($.imageMan.opts.source, function(data) {
-          var images = $.imageMan.opts.extractor(data)
-            , body = $($.imageMan.opts.templateBody);
+		trigger.data('options.imageman', options);
+        $.getJSON(options.source, function(data) {
+          var images = options.extractor(data)
+            , body = $(options.templateBody);
 
           if (!images) {
             console.log('no image data', data);
             return;
           }
 
-          if (!$.imageMan.opts.delete) {
+          if (!options.delete) {
             body.find('.imageman-viewer-control.delete').remove();
           }
-          if ($.imageMan.opts.limitText) {
-            var limitBox = $('<div class="imageman-viewer-limittext"></div>').text($.imageMan.opts.limitText);
+          if (options.limitText) {
+            var limitBox = $('<div class="imageman-viewer-limittext"></div>').text(options.limitText);
             body.find('.imageman-viewer-controls').after(limitBox)
           }
 
           $.each(images, function() {
-            body.find('.imageman-thumbs').append($.imageMan.createThumb.apply(this));
+            body.find('.imageman-thumbs').append($.imageMan.createThumb.apply(this, [options]));
           });
 
-          if ($.imageMan.opts.upload) {
+          if (options.upload) {
             if (typeof(qq) != 'undefined' && qq.FileUploader) {
-              body.find('.imageman-thumbs').append($.imageMan.opts.templateUploadThumb);
+              body.find('.imageman-thumbs').append(options.templateUploadThumb);
             } else {
               alert('qq.FileUploader is not loaded');
             }
           }
 
-          $.imageMan.opts.dialog.create = function(e, ui) {
+          options.dialog.create = function(e, ui) {
             var dialog = $(e.target);
 
             dialog.delegate('.imageman-thumb', 'click', function() {
@@ -144,12 +143,12 @@
 
                 viewer.addClass('uploading').removeClass('loading');
                 if (!upload.hasClass('loaded')) {
-                  var uploaderOpts = $.extend({}, $.imageMan.opts.uploader);
+                  var uploaderOpts = $.extend({}, options.uploader);
                   uploaderOpts.element = upload[0];
                   uploaderOpts.onComplete = function(id, filename, json) {
                     if (json.success) {
-                      thumb.before($.imageMan.createThumb.apply(json));
-                      $.imageMan.resizeThumbs();
+                      thumb.before($.imageMan.createThumb.apply(json, [options]));
+                      $.imageMan.resizeThumbs(options);
                       $.imageMan.centerThumb.apply(thumb);
 
                     } else if (json.error) {
@@ -180,8 +179,8 @@
             });
             dialog.delegate('.imageman-viewer-control.select', 'click', function() {
               var viewer = $(this).parents('.imageman-viewer');
-              if ($.imageMan.opts.select) {
-                $.imageMan.opts.select.apply(trigger, [viewer.data('image')]);
+              if (options.select) {
+                options.select.apply(trigger, [viewer.data('image')]);
               }
               trigger.trigger('select.imageman', viewer.data('image'));
               $.imageMan.dialog.dialog('close');
@@ -191,8 +190,8 @@
                 , thumb = viewer.data('thumb')
                 , image = viewer.data('image');
 
-              if ($.imageMan.opts.delete) {
-                $.imageMan.opts.delete.apply(image, [thumb, $.imageMan.deleteCallback]);
+              if (options.delete) {
+                options.delete.apply(image, [thumb, $.imageMan.deleteCallback, options]);
               }
             });
             dialog.delegate('.imageman-browser-button', 'click', function() {
@@ -202,10 +201,10 @@
               else
                 selected.next().click()
             });
-            $.imageMan.resizeThumbs(dialog);
+            $.imageMan.resizeThumbs(options, dialog);
             dialog.find('.imageman-thumb').first().click();
           }
-          $.imageMan.dialog = body.dialog($.imageMan.opts.dialog);
+          $.imageMan.dialog = body.dialog(options.dialog);
         });
 
         return false;
@@ -213,15 +212,17 @@
   }
 
   $.fn.imageMan = function(opts) {
-    $.extend(true, $.imageMan.opts, $.imageMan.defaults, opts);
+	var options = $.extend(true, {}, $.imageMan.defaults, opts);
 
     if ($(this).length) {
-      $(this).click( $.imageMan.open );
+      $(this).click( function() {
+	  	$.imageMan.open.apply(this, [options]);
+		return false;
+	  });
       return this;
 
     } else {
-      $.imageMan.open.apply(document);
-      return $.imageMan.dialog
+      return $.imageMan.open.apply(document, [options]);
     }
   }
 })(jQuery);
