@@ -4,7 +4,7 @@
           source: null
         , baseSrc: ''
         , limit: false
-        , delete: null
+        , 'delete': null
         , select: null
         , dialog: {
             height: 500
