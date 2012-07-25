@@ -106,7 +106,7 @@
             return;
           }
 
-          if (!options.delete) {
+          if (!options['delete']) {
             body.find('.imageman-viewer-control.delete').remove();
           }
           if (options.limitText) {
@@ -190,8 +190,8 @@
                 , thumb = viewer.data('thumb')
                 , image = viewer.data('image');
 
-              if (options.delete) {
-                options.delete.apply(image, [thumb, $.imageMan.deleteCallback, options]);
+              if (options['delete']) {
+                options['delete'].apply(image, [thumb, $.imageMan.deleteCallback, options]);
               }
             });
             dialog.delegate('.imageman-browser-button', 'click', function() {
