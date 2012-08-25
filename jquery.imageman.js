@@ -102,7 +102,6 @@
             , body = $(options.templateBody);
 
           if (!images) {
-            console.log('no image data', data);
             return;
           }
 
