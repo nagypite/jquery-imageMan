@@ -141,6 +141,7 @@
                 var upload = viewer.find('.imageman-viewer-upload');
 
                 viewer.addClass('uploading').removeClass('loading');
+                viewer.find('.imageman-viewer-title').text('Upload');
                 if (!upload.hasClass('loaded')) {
                   var uploaderOpts = $.extend({}, options.uploader);
                   uploaderOpts.element = upload[0];
@@ -154,7 +155,7 @@
                       alert('Upload failed: ' + json.error);
 
                     } else {
-                      alert('Upload failed');
+                      alert('Upload failed: server error');
                     }
                   };
                   $.imageMan.uploader = new qq.FileUploader(uploaderOpts);
