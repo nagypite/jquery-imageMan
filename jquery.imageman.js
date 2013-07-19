@@ -119,7 +119,7 @@
 
           if (options.upload) {
             if (typeof(qq) != 'undefined' && qq.FileUploader) {
-              body.find('.imageman-thumbs').append(options.templateUploadThumb);
+              body.find('.imageman-thumbs').prepend(options.templateUploadThumb);
             } else {
               alert('qq.FileUploader is not loaded');
             }
@@ -147,7 +147,7 @@
                   uploaderOpts.element = upload[0];
                   uploaderOpts.onComplete = function(id, filename, json) {
                     if (json.success) {
-                      thumb.before($.imageMan.createThumb.apply(json, [options]));
+                      thumb.after($.imageMan.createThumb.apply(json, [options]));
                       $.imageMan.resizeThumbs(options);
                       $.imageMan.centerThumb.apply(thumb);
 
